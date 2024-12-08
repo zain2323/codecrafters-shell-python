@@ -49,7 +49,7 @@ def main():
             response = stringify_args(args)
             status, dir = check_presence_of_command(response)
             if status and dir != '':
-                sys.stdout.write(f'{response} is {dir}\n')
+                sys.stdout.write(f'{response} is {dir}/{response}\n')
             else:
                 sys.stdout.write(f"{response}: not found\n")
         else:
