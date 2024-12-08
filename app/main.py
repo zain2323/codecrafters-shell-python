@@ -20,8 +20,14 @@ def _init():
             BINARIES[dir] = os.listdir(dir)
 
 
+def _normalize(command: str) -> tuple[str, bool]:
+    """Preserves the single quote literal value"""
+    normalized = command.replace("'", '')
+    return normalized, len(command) != len(normalized)
+
 def parse_args(command: str):
-    command = command.split()
+    command, is_normalized = _normalize(command)
+    command = command.split(' ') if is_normalized else command.split()
     cmd, *args = command[0], *command[1:]
     return cmd, args
 
@@ -42,6 +48,7 @@ def _construct_subprocess_command(cmd, args) -> [str]:
     for arg in args:
         command.append(arg)
     return command
+
 
 def main():
     # start repl
@@ -89,6 +96,8 @@ def main():
                     sys.stdout.write(completed_process.stdout.decode())
                 else:
                     sys.stderr.write(completed_process.stderr.decode())
+
+
 if __name__ == "__main__":
     _init()
     main()
