@@ -2,15 +2,19 @@ import sys
 import os
 
 PATH = os.environ.get('PATH')
-BINARIES = []
+BINARIES = {}
 
 
 def _init():
     global BINARIES
     dirs = PATH.split(':')
     for dir in dirs:
-        if os.path.exists(dir):
-            BINARIES += os.listdir(dir)
+        if not os.path.exists(dir):
+            continue
+        if dir in BINARIES:
+            BINARIES[dir] += os.listdir(dir)
+        else:
+            BINARIES[dir] = os.listdir(dir)
 
 
 def parse_args(command: str):
@@ -23,9 +27,11 @@ def stringify_args(args: list[str]):
     return ' '.join(args)
 
 
-def check_presence_of_command(cmd: str):
-    return cmd in BINARIES
-
+def check_presence_of_command(cmd: str) -> tuple[bool, str]:
+    for dir, binaries in BINARIES.items():
+        if cmd in binaries:
+            return True, dir
+    return False, ''
 
 def main():
     # start repl
@@ -41,8 +47,9 @@ def main():
             sys.stdout.write(f'{response}\n')
         elif cmd == 'type':
             response = stringify_args(args)
-            if check_presence_of_command(response):
-                sys.stdout.write(f'{response} is a shell builtin\n')
+            status, dir = check_presence_of_command(response)
+            if status and dir != '':
+                sys.stdout.write(f'{response} is {dir}\n')
             else:
                 sys.stdout.write(f"{response}: not found\n")
         else:
