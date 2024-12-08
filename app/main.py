@@ -9,7 +9,8 @@ def _init():
     global BINARIES
     dirs = PATH.split(':')
     for dir in dirs:
-        BINARIES += os.listdir(dir)
+        if os.path.exists(dir):
+            BINARIES += os.listdir(dir)
 
 
 def parse_args(command: str):
