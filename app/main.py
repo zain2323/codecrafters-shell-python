@@ -4,7 +4,7 @@ import subprocess
 
 PATH = os.environ.get('PATH')
 BINARIES = {}
-BUILTIN_BINARIES = ['type', 'echo', 'exit', 'pwd']
+BUILTIN_BINARIES = ['type', 'echo', 'exit', 'pwd', 'cd']
 
 
 def _init():
