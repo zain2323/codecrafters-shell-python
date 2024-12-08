@@ -1,5 +1,6 @@
 import sys
 import os
+import subprocess
 
 PATH = os.environ.get('PATH')
 BINARIES = {}
@@ -34,6 +35,13 @@ def check_presence_of_command(cmd: str) -> tuple[bool, str]:
             return True, dir
     return False, ''
 
+
+def _construct_subprocess_command(cmd, args) -> [str]:
+    command = [cmd]
+    for arg in args:
+        command.append(arg)
+    return command
+
 def main():
     # start repl
     while True:
@@ -56,9 +64,20 @@ def main():
             else:
                 sys.stdout.write(f"{response}: not found\n")
         else:
-            sys.stdout.write(f"{command}: command not found\n")
-
-
+            # if command is not in the PATH variable then it is and invalid command
+            status, dir = check_presence_of_command(cmd)
+            if not (status and dir != ''):
+                sys.stdout.write(f"{command}: command not found\n")
+                continue
+            # else executing the binary located in the PATH variable
+            else:
+                posix_path = f'{dir}/{cmd}'
+                args = _construct_subprocess_command(cmd, args)
+                completed_process = subprocess.run(args, capture_output=True)
+                if completed_process.returncode == 0 and completed_process.stdout:
+                    sys.stdout.write(completed_process.stdout.decode())
+                else:
+                    sys.stderr.write(completed_process.stderr.decode())
 if __name__ == "__main__":
     _init()
     main()
