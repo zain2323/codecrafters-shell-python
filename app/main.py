@@ -1,5 +1,7 @@
 import sys
 
+COMMANDS = ['echo', 'exit', 'type']
+
 def parse_args(command: str):
     command = command.split()
     cmd, *args = command[0], *command[1:]
@@ -21,6 +23,12 @@ def main():
         elif cmd == 'echo':
             response = stringify_args(args)
             sys.stdout.write(f'{response}\n')
+        elif cmd == 'type':
+            response = stringify_args(args)
+            if response in COMMANDS:
+                sys.stdout.write(f'{response} is a shell builtin\n')
+            else:
+                sys.stdout.write(f"{response}: not found\n")
         else:
             sys.stdout.write(f"{command}: command not found\n")
 
