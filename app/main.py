@@ -1,6 +1,7 @@
 import sys
 import os
 import subprocess
+import shlex
 
 PATH = os.environ.get('PATH')
 HOME = os.environ.get('HOME')
@@ -20,14 +21,8 @@ def _init():
             BINARIES[dir] = os.listdir(dir)
 
 
-def _normalize(command: str) -> tuple[str, bool]:
-    """Preserves the single quote literal value"""
-    normalized = command.replace("'", '')
-    return normalized, len(command) != len(normalized)
-
 def parse_args(command: str):
-    command, is_normalized = _normalize(command)
-    command = command.split(' ') if is_normalized else command.split()
+    command = shlex.split(command)
     cmd, *args = command[0], *command[1:]
     return cmd, args
 
