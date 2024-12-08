@@ -63,6 +63,8 @@ def main():
                 sys.stdout.write(f'{response} is {dir}/{response}\n')
             else:
                 sys.stdout.write(f"{response}: not found\n")
+        elif cmd == 'pwd':
+            sys.stdout.write(f"{os.getcwd()}\n")
         else:
             # if command is not in the PATH variable then it is and invalid command
             status, dir = check_presence_of_command(cmd)
