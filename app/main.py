@@ -3,6 +3,7 @@ import os
 
 PATH = os.environ.get('PATH')
 BINARIES = {}
+BUILTIN_BINARIES = ['type', 'echo', 'exit']
 
 
 def _init():
@@ -48,7 +49,9 @@ def main():
         elif cmd == 'type':
             response = stringify_args(args)
             status, dir = check_presence_of_command(response)
-            if status and dir != '':
+            if response in BUILTIN_BINARIES:
+                sys.stdout.write(f"{response} is a shell builtin\n")
+            elif status and dir != '':
                 sys.stdout.write(f'{response} is {dir}/{response}\n')
             else:
                 sys.stdout.write(f"{response}: not found\n")
