@@ -65,6 +65,12 @@ def main():
                 sys.stdout.write(f"{response}: not found\n")
         elif cmd == 'pwd':
             sys.stdout.write(f"{os.getcwd()}\n")
+        elif cmd == 'cd':
+            path = stringify_args(args)
+            try:
+                os.chdir(path)
+            except FileNotFoundError:
+                sys.stdout.write(f"{cmd}: {path}: No such file or directory\n")
         else:
             # if command is not in the PATH variable then it is and invalid command
             status, dir = check_presence_of_command(cmd)
