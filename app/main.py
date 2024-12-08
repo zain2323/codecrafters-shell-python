@@ -72,7 +72,7 @@ def main():
             # else executing the binary located in the PATH variable
             else:
                 posix_path = f'{dir}/{cmd}'
-                args = _construct_subprocess_command(cmd, args)
+                args = _construct_subprocess_command(posix_path, args)
                 completed_process = subprocess.run(args, capture_output=True)
                 if completed_process.returncode == 0 and completed_process.stdout:
                     sys.stdout.write(completed_process.stdout.decode())
