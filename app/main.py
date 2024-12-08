@@ -3,6 +3,7 @@ import os
 import subprocess
 
 PATH = os.environ.get('PATH')
+HOME = os.environ.get('HOME')
 BINARIES = {}
 BUILTIN_BINARIES = ['type', 'echo', 'exit', 'pwd', 'cd']
 
@@ -67,6 +68,8 @@ def main():
             sys.stdout.write(f"{os.getcwd()}\n")
         elif cmd == 'cd':
             path = stringify_args(args)
+            if path == '~':
+                path = HOME
             try:
                 os.chdir(path)
             except FileNotFoundError:
